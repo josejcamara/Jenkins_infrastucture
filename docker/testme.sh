@@ -4,23 +4,26 @@ NAME_VERSION="jenkins_master:v1"
 IMAGE_NAME="myjenkins"
 JENKINS_PORT="8080"
 
-## https://www.jenkins.io/doc/book/managing/system-properties/
-JVM_PARAMS="-Dhudson.footerURL=http://mycompany.com "
-JVM_PARAMS="$JVM_PARAMS -Djava.util.logging.config.file=/var/jenkins_home/log.properties"
+echo "Removing old instances "
+docker stop $IMAGE_NAME || true && docker rm --volumes $IMAGE_NAME || true
 
-REMOVE_VOLUMES=""
-read -p "Remove old volumes? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    REMOVE_VOLUMES="--volumes"
-fi
-echo "Removing old instances $REMOVE_VOLUMES"
-docker stop $IMAGE_NAME || true && docker rm $REMOVE_VOLUMES $IMAGE_NAME || true
+# Admin password
+# https://technologyconversations.com/2017/06/16/automating-jenkins-docker-setup/
+read -p 'Admin Username: ' uservar
+read -sp 'Admin Password: ' passvar
+echo
+docker secret rm jenkins_admin_user || true && printf "$uservar" | docker secret create jenkins_admin_user -
+docker secret rm jenkins_admin_pass || true && printf "$passvar" | docker secret create jenkins_admin_pass -
 
 echo "Building Jenkins docker"
-docker build --no-cache -t $NAME_VERSION .
+docker build -t $NAME_VERSION .
 
-docker run --name $IMAGE_NAME -p 8080:$JENKINS_PORT -p 50000:50000 --env JAVA_OPTS="$JVM_PARAMS" $NAME_VERSION
+# TODO: docker service create 
+docker run --name $IMAGE_NAME \
+    -p $JENKINS_PORT:8080 -p 50000:50000 \
+    $NAME_VERSION
 
-echo "Jenkins running on $JENKINS_PORT"
+# TODO:
+# echo "Jenkins running on $JENKINS_PORT"
+# read -p "Click enter to stop/remove the service " -n 1 -r
+# docker service rm $IMAGE_NAME
