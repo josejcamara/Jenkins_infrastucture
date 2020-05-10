@@ -12,7 +12,6 @@ RUN chown -R jenkins:jenkins /var/cache/jenkins
 USER jenkins
 COPY config/log.properties /var/jenkins_home/log.properties
 
-# Skip install wizard, but still configure a secure Jenkins by creating the admin user
 ## https://www.jenkins.io/doc/book/managing/system-properties/
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false \
 -Djava.util.logging.config.file=/var/jenkins_home/log.properties \
@@ -21,7 +20,9 @@ ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false \
 ENV JENKINS_OPTS=" --handlerCountMax=100 \
 --logfile=/var/log/jenkins/jenkins.log \
 --webroot=/var/cache/jenkins/war"
-COPY config/secureAdminUser.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
+
+# Skip install wizard, but still configure a secure Jenkins by creating the admin user
+#COPY config/secureAdminUser.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
 
 # Install this list of plugins
 COPY config/plugins.txt /usr/share/jenkins/ref/plugins.txt
