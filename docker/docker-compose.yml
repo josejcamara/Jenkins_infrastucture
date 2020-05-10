@@ -1,0 +1,24 @@
+version: '3'
+services:
+  jenkins-master:
+    build: ./jenkins-master
+    image: jenkins-master
+    ports:
+      - "50000:50000"
+    volumes:
+      - jenkins-log:/var/log/jenkins
+      - jenkins-data:/var/jenkins_home
+    networks:
+      - jenkins-net
+  jenkins-nginx:
+    build: ./jenkins-nginx
+    image: jenkins-nginx
+    ports:
+      - "80:80"
+    networks:
+      - jenkins-net
+volumes:
+  jenkins-data:
+  jenkins-log:
+networks:
+  jenkins-net:
