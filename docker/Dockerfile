@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.222.3
 
 # Executors config
 COPY config/executors.groovy /usr/share/jenkins/ref/init.groovy.d/executors.groovy
@@ -6,7 +6,9 @@ COPY config/executors.groovy /usr/share/jenkins/ref/init.groovy.d/executors.groo
 # Log config
 USER root
 RUN mkdir /var/log/jenkins
-RUN chown -R  jenkins:jenkins /var/log/jenkins
+RUN mkdir /var/cache/jenkins
+RUN chown -R jenkins:jenkins /var/log/jenkins
+RUN chown -R jenkins:jenkins /var/cache/jenkins
 USER jenkins
 COPY config/log.properties /var/jenkins_home/log.properties
 
@@ -17,7 +19,8 @@ ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false \
 -Dhudson.footerURL=http://mycompany.com \
 -Xmx2048m"
 ENV JENKINS_OPTS=" --handlerCountMax=100 \
---logfile=/var/log/jenkins/jenkins.log"
+--logfile=/var/log/jenkins/jenkins.log \
+--webroot=/var/cache/jenkins/war"
 COPY config/secureAdminUser.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
 
 # Install this list of plugins
