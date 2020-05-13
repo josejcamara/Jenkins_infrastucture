@@ -7,4 +7,6 @@ stop:
 clean-data: 
 	@docker-compose -p jenkins down -v
 clean-images:
-	@docker rmi 'docker images -q -f "dangling=true"'
+	@docker rmi $(shell docker images -q -f "dangling=true")
+jenkins-log:
+	@docker-compose -p jenkins exec jenkins-master tail -f /var/log/jenkins/jenkins.log
