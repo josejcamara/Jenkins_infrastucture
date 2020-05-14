@@ -26,16 +26,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 
-# #---- openjdk:8-jdk-stretch
-ENV LANG C.UTF-8
-ENV JAVA_VERSION 8u252
-ENV JAVA_URL_VERSION 8u252b09
+#---- openjdk:8-jdk-stretch
+
 # https://packages.debian.org/stretch/openjdk-8-jdk
 ENV JAVA_DEB_VERSION 8u252-b09-1~deb9u1
-# ENV CA_CERTIFICATES_JAVA_VERSION ????
+# https://packages.debian.org/stretch/ca-certificates-java
+ENV CA_CERTIFICATES_JAVA_VERSION 20170929~deb9u3
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		openjdk-8-jdk="$JAVA_DEB_VERSION" \
-    	ca-certificates-java \
+    	ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
     && rm -rf /var/lib/apt/lists/* \
 	\
 # basic smoke test
@@ -126,6 +125,7 @@ EXPOSE ${http_port}
 EXPOSE ${agent_port}
 
 # Copy in local config files
+COPY utility-files/init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
 COPY utility-files/jenkins-support /usr/local/bin/jenkins-support
 COPY utility-files/jenkins.sh /usr/local/bin/jenkins.sh
 COPY utility-files/plugins.sh /usr/local/bin/plugins.sh
