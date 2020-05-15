@@ -130,16 +130,23 @@ COPY utility-files/jenkins-support /usr/local/bin/jenkins-support
 COPY utility-files/jenkins.sh /usr/local/bin/jenkins.sh
 COPY utility-files/plugins.sh /usr/local/bin/plugins.sh
 COPY utility-files/install-plugins.sh /usr/local/bin/install-plugins.sh
-RUN chmod +x /usr/local/bin/jenkins-support \
-   && chmod +x /usr/local/bin/jenkins.sh \
-   && chmod +x /usr/local/bin/install-plugins.sh
-
-# Install this list of plugins
-COPY config/plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+RUN chmod +x /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy \
+	&& chmod +x /usr/local/bin/jenkins-support \
+	&& chmod +x /usr/local/bin/plugins.sh \
+	&& chmod +x /usr/local/bin/jenkins.sh \
+	&& chmod +x /usr/local/bin/install-plugins.sh
 
 # Master executors config
 COPY config/executors.groovy /usr/share/jenkins/ref/init.groovy.d/executors.groovy
+
+# Install this list of plugins
+COPY config/plugins.txt /tmp/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /tmp/plugins.txt
+
+# Config plugins
+RUN mkdir -p "$JENKINS_HOME/userContent/ui"
+COPY config/plugin_simple-theme-plugin/theme-cyan.css "$JENKINS_HOME/userContent/ui/theme-cyan.css"
+COPY config/plugin_simple-theme-plugin/org.codefirst.SimpleThemeDecorator.xml "$JENKINS_HOME/org.codefirst.SimpleThemeDecorator.xml"
 
 # Skip install wizard, but still configure a secure Jenkins by creating the admin user
 # ENV JAVA_OPTS="${JAVA_OPTS} -Djenkins.install.runSetupWizard=false "

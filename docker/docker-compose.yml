@@ -1,8 +1,7 @@
 version: '3'
 services:
-  jenkins-master:
+  jmaster:
     build: ./jenkins-master
-    image: jenkins-master
     ports:
       - "50000:50000"
     volumes:
@@ -10,13 +9,22 @@ services:
       - jenkins-data:/var/jenkins_home
     networks:
       - jenkins-net
-  jenkins-nginx:
+  jnginx:
     build: ./jenkins-nginx
-    image: jenkins-nginx
     ports:
       - "80:80"
     networks:
       - jenkins-net
+  jslave:
+    build: ./jenkins-slave
+  jproxy:
+    build: ./docker-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      jenkins-net:
+        aliases:
+          - proxy1 
 volumes:
   jenkins-data:
   jenkins-log:
