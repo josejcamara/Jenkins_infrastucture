@@ -8,26 +8,13 @@
 # https://youtu.be/B9zhtyIazzM
 # https://www.jenkins.io/doc/book/installing/#debianubuntu
 
-# wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key
-remote_file '/tmp/jenkins-ci.org.key' do
-    source 'https://pkg.jenkins.io/debian-stable/jenkins.io.key'
-    notifies :run, 'execute[apt-key add /tmp/jenkins-ci.org.key]', :immediately
-end
-# | sudo apt-key add -
-execute 'apt-key add /tmp/jenkins-ci.org.key' do
-    action :nothing
-end
+include_recipe 'apt::default'
 
-# sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-file '/etc/apt/sources.list.d/jenkins.list' do
-    content 'deb https://pkg.jenkins.io/debian-stable binary/'
-    notifies :run, 'execute[apt-get update]', :immediately
-end
-
-# sudo apt-get update
-execute 'apt-get update' do
-    action :nothing
-end
+apt_repository 'jenkins' do
+    uri   'https://pkg.jenkins.io/debian-stable' 
+    distribution 'binary/'
+    key   'https://pkg.jenkins.io/debian-stable/jenkins.io.key' 
+  end
 
 # Found this issue with the installation
 # https://issues.jenkins-ci.org/browse/JENKINS-31814

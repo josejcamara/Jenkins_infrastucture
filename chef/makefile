@@ -4,6 +4,7 @@ create:
 	@cd $(BUILD_DIR) && kitchen create
 
 apply:
+	@cd ${BUILD_DIR} && berks install
 	@cd $(BUILD_DIR) && kitchen converge
 
 test:

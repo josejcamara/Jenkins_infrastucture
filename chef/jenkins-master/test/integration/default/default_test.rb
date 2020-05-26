@@ -16,5 +16,5 @@ describe port(8080), :skip do
 end
 
 describe command('wget -O - http://localhost:8080/login') do
-  its(:stdout) { should match(/Unlock Jenkins/) }
+  its(:stdout) { should match(/Jenkins/) }
 end
