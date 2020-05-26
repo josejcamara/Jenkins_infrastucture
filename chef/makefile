@@ -1,17 +1,13 @@
-BUILD_DIR = $(shell pwd)/cookbooks/jenkins-master
+BUILD_DIR = $(shell pwd)/jenkins-master
 
 create:
-	# I can't get kitchen forwarded_port working
-	# @cd $(BUILD_DIR) && kitchen create
-	@vagrant up
+	@cd $(BUILD_DIR) && kitchen create
 
 apply:
-	# @cd $(BUILD_DIR) && kitchen converge
-	@vagrant provision
+	@cd $(BUILD_DIR) && kitchen converge
 
 test:
 	@cd $(BUILD_DIR) && kitchen verify
 
 clean:
 	@cd $(BUILD_DIR) && kitchen destroy
-	@vagrant destroy
