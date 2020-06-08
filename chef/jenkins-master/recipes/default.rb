@@ -6,16 +6,54 @@
 
 include_recipe 'apt::default'
 
+['unzip','git'].each do |p|
+    package p do
+      action :install
+    end
+  end
+
 # include_recipe 'java'
 package 'openjdk-8-jre-headless'
 
-package 'unzip'
-
+###### attributes -> default['jenkins']['http_proxy']...
 # if node['jenkins-server']['nginx']['install']
 #   include_recipe 'jenkins-server::nginx'
 # end
 
 include_recipe 'jenkins::master'
+
+JENKINS_HOME = node['jenkins']['master']['home']
+SSL_DIR = File.join(JENKINS_HOME, "ssl")
+SSH_DIR = File.join(JENKINS_HOME, ".ssh")
+[ SSL_DIR, SSH_DIR ].each do |dir_name|
+    directory dir_name do
+        owner node['jenkins']['master']['user']
+        group node['jenkins']['master']['group']
+        mode '0700'
+        recursive true
+    end
+end
+
+# Create private key file
+file File.join("#{SSH_DIR}","id_rsa") do
+    content node['jenkins-master']['dev_mode']['security']['private_key']
+    owner node['jenkins']['master']['user']
+    group node['jenkins']['master']['group']
+    mode 0600
+    action :create
+end
+
+# Create public key file
+file File.join("#{SSH_DIR}","id_rsa.pub") do
+    content node['jenkins-master']['dev_mode']['security']['public_key']
+    owner node['jenkins']['master']['user']
+    group node['jenkins']['master']['group']
+    mode 0644
+    action :create
+    # notifies :create, "ruby_block[store_ssh_public_key]", :immediately
+end
+
+
 
 # include_recipe 'jenkins-master::settings'
 
