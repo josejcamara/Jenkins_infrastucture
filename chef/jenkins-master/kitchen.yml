@@ -6,8 +6,10 @@ driver:
 ## localhost on the host.
 ## see also: https://www.vagrantup.com/docs/networking/forwarded_ports.html
 
-#  network:
-#    - ["forwarded_port", {guest: 80, host: 8080}]
+#   network:
+#     - ["forwarded_port", {guest: 80, host: 8080}]
+#   synced_folders:
+#     - ["data/jenkins", "/var/jenkins", "create: true"]
 
 provisioner:
   name: chef_zero
