@@ -22,4 +22,5 @@ plugins_list.each do |plugin|
   end
 end
 
-# TODO: Restart to apply changes
+# Restart to apply changes
+jenkins_command 'safe-restart'
