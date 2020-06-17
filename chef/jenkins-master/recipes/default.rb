@@ -12,8 +12,8 @@ include_recipe 'apt::default'
     end
   end
 
-# include_recipe 'java'
-package 'openjdk-8-jre-headless'
+# package 'openjdk-8-jre-headless'
+openjdk_install '11' # It looks like 8 is not available anymore
 
 include_recipe 'jenkins::master'
 
