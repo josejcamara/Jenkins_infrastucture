@@ -20,3 +20,4 @@ include_recipe 'jenkins::master'
 include_recipe 'jenkins-master::plugins'
 include_recipe 'jenkins-master::users'
 
+include_recipe 'jenkins-master::nginx'
