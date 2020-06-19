@@ -31,7 +31,7 @@ platforms:
     driver:
       gui: true
       network:
-      - ["forwarded_port", {guest: 8080, host: 8080}]
+      - ["forwarded_port", {guest: 80, host: 8088}]
 
 suites:
   - name: default
