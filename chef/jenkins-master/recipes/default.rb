@@ -17,6 +17,7 @@ openjdk_install '11' # It looks like 8 is not available anymore
 
 include_recipe 'jenkins::master'
 
+include_recipe 'jenkins-master::config'
 include_recipe 'jenkins-master::plugins'
 include_recipe 'jenkins-master::users'
 
