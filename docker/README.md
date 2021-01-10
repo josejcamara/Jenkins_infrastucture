@@ -27,8 +27,8 @@ We’re now ready to configure our Dockerhost and first ephemeral slave on Jenki
 - Select Docker from the drop down
 
 A new form pops. This form is the high level information you need to enter about your Dockerhost. Please note, you can create many Dockerhosts if you want. This is one way you can manage which build images run on which machines. For this tutorial, we’ll stick with one.
-- In the Name field enter “LocalDockerHost”
--In the Docker Host URI field enter: “tcp://proxy1:2375”
+- In the Name field enter "LocalDockerHost"
+-In the Docker Host URI field enter: "tcp://proxy1:2375"
 
 - Click on Test Connection and you should get a response that shows Version and API version of your docker host.
 

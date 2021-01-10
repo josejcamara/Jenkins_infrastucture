@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #---- openjdk:8-jdk-stretch
 
 # https://packages.debian.org/stretch/openjdk-8-jdk
-ENV JAVA_DEB_VERSION 8u252-b09-1~deb9u1
+ENV JAVA_DEB_VERSION 8u275-b01-1~deb9u1
 # https://packages.debian.org/stretch/ca-certificates-java
 ENV CA_CERTIFICATES_JAVA_VERSION 20170929~deb9u3
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -59,8 +59,8 @@ ARG gid=1000
 ARG http_port=8080
 ARG agent_port=50000
 # To find available versions and SHA’s for Jenkins WAR files you can go here: http://mirrors.jenkins.io/war-stable/
-ARG JENKINS_VERSION=2.222.3
-ARG JENKINS_SHA=1529d642e29e74f65369ff5611935e9361065d9e8f65344a64912c5660cc0781
+ARG JENKINS_VERSION=2.263.1
+ARG JENKINS_SHA=0eedeb2b11a32726acb57db26e262b1923cf408e84708baf471e3b53462ed6f1
 ARG TINI_VERSION=v0.16.1
 ARG JENKINS_HOME=/var/jenkins_home
 ARG REF=/usr/share/jenkins/ref
